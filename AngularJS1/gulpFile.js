@@ -2,13 +2,7 @@
 
 // Example
 // gulp
-// gulp build --environment recette
-// gulp build --environment production
-// Example livraison :
-// gulp delivery --environment integration
-// gulp delivery --environment recette
-// gulp delivery --environment prod
-// Include gulp
+
 var gulp = require('gulp');
 
 // Include Plugins

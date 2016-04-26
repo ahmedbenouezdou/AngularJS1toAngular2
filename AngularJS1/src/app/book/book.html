@@ -1,0 +1,40 @@
+
+<div class="row">
+    <div class="col-xs-12 col-md-12 col-lg-12">
+
+        <div class="row" >
+            <div class="col-xs-6 col-md-3 col-lg-4" ng-repeat="list in listBook">
+                <div class="panel panel-primary" >
+
+                    <div class="panel-heading"> {{list.title}}   <span class="badge"> {{list.price}}<samp class="glyphicon glyphicon-euro"></samp></span></div>
+                    <div class="panel-body">
+                        <div class="media">
+                            <div class="media-left media-middle">
+                            <center> <img class="media-object" src="{{list.cover}}" style="width:170px; height:220px; border:none;    margin-left: 46%;"></center>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                </div>
+                            <div class="col-lg-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="sizing-addon2">Quantité:</span>
+                                    <input type="number" class="form-control" name="input" ng-model="quantite[$index]" min="0" max="99" required>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" ng-click="addPanier($index)"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button>
+                                         </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

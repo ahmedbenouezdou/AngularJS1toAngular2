@@ -1,0 +1,92 @@
+.prixGauche{
+    margin: 0px;
+}
+
+.tags {
+    list-style: none;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+.tags li {
+    float: left;
+}
+
+.tagOffre li {
+    float: right;
+}
+.tagOffre  {
+    border-radius: 3px 0 0 3px;
+    color: #000;
+    display: inline-block;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 20px 0 23px;
+    position: relative;
+    margin: 4px 10px 0 -9px;
+    text-decoration: none;
+    -webkit-transition: color 0.2s;
+    background-color: red;
+}
+.tag {
+    border-radius: 3px 0 0 3px;
+    color: #000;
+    display: inline-block;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 20px 0 23px;
+    position: relative;
+    margin: 4px 10px 0 -9px;
+    text-decoration: none;
+    -webkit-transition: color 0.2s;
+    background-color: #5cb85c;
+}
+
+.tag::before,.tagOffre::before  {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.25);
+    content: '';
+    height: 6px;
+    left: 10px;
+    position: absolute;
+    width: 6px;
+    top: 10px;
+}
+
+.tag::after{
+    background: #fff;
+    border-bottom: 13px solid transparent;
+    border-left: 10px solid #5cb85c;
+    border-top: 13px solid transparent;
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.tagOffre::after  {
+    background: #fff;
+    border-bottom: 13px solid transparent;
+    border-left: 10px solid red;
+    border-top: 13px solid transparent;
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.centreTitre{
+    text-align: center;
+}
+
+#compte{
+    padding: 5px;
+    min-width: 201px;
+}
+
+#login{
+    margin: 0px 0px 3px 0px;
+}
+

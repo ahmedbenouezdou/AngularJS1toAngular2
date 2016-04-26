@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr" ng-app="angularJS1toAngular2BeeZen">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+
+    <title>AngularJS1 to Angular2</title>
+
+    <!-- inject:css -->
+
+
+
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+
+
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+
+
+    <link rel="stylesheet" href="css/daterangepicker.css">
+
+
+
+    <link rel="stylesheet" href="css/style.css">
+
+
+
+    <!-- endinject -->
+
+
+</head>
+
+<body>
+    <div ng-include="'app/nav/navigation.html'"></div>
+
+    <div class="container" ng-view></div>
+<!-- inject:js -->
+
+<script src="js/vendor.js"></script>
+
+<script src="js/locale.js"></script>
+
+<script src="app/app.js"></script>
+
+<script src="app/book/book.js"></script>
+
+<script src="app/panier/panierController.js"></script>
+
+<script src="app/panier/servicePanier.js"></script>
+
+<!-- endinject -->
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+.idea
+
+**/.idea
+**/node_modules
+**/libs
+
+**/npm-debug
+
+angular2/**/*.js
+angular2/**/*.map

@@ -21,17 +21,17 @@ export class BookComponent {
         this.listBook = [];
         this.quantite=[];
         this.bookService=bookService;
-        this.getMovies();
+        this.getBook();
     }
 
-    getMovies(){
+    getBook(){
         this.bookService.fetchBook().subscribe((listBook)=>{
             this.listBook=listBook;
         });
     }
 
     addPanier(i:number){
-        console.log(this.quantite[i])
+        console.log(this.listBook[i],this.quantite[i])
     }
 
 

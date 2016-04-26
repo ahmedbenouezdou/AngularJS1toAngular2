@@ -16,7 +16,6 @@ app.use(require('connect-livereload')());
 
 app.get('/listBook', service.getAllList);
 
-app.get('/panier', service.getPanier);
 app.get('/listOffre/:idisbn', service.getOffre);
 app.use('/', express.static(__dirname + '/src'));
 

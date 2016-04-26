@@ -51,7 +51,6 @@ exports.getAllList = function getAllList(req, response) {
 };
 
 
-exports.getPanier
 
 
 exports.getOffre = function getOffre(req, response) {

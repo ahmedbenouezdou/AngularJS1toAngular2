@@ -25,4 +25,14 @@ import {PanierService} from './panier/panier.service';
 
 export class AppComponent {
 
+    panierService:PanierService;
+    nbPanier:number;
+    constructor( panierService:PanierService) {
+        this.panierService=panierService;
+     //   this.nbPanier=this.panierElement();
+    }
+
+    panierElement(){
+        return this.panierService.panierNbElement();
+    }
 }

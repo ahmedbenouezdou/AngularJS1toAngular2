@@ -9,7 +9,7 @@
 
     <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading">MON PANIER {{panier.length}}</div>
+        <div class="panel-heading">MON PANIER</div>
 
         <!-- Table -->
         <table class="table">
@@ -27,7 +27,7 @@
                 <td style="text-align: center;">{{listBooks.quantiteBook}}</td>
                 <td style="text-align: center;">{{listBooks.price}}</td>
                 <td style="text-align: center;">{{listBooks.price * listBooks.quantiteBook}} <samp class="glyphicon glyphicon-euro"></samp></td>
-                <td style="text-align: center;"><a (click)="remove(i)"><samp class="glyphicon glyphicon-trash"></samp></a></td>
+                <td style="text-align: center;"><counter [id]="i"  [counterValue]="myValue" (counterChange)="myValueChange($event)"></counter></td>
 
             </tr>
             <tr  *ngIf="panier.length==0">
@@ -38,6 +38,8 @@
 
 
     <div class="row">
+
+
         <div class="col-xs-8 col-md-8 col-lg-8"></div>
         <div class="col-xs-4 col-md-4 col-lg-4">
             <ul class="list-group">

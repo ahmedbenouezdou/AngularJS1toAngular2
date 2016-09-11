@@ -6,5 +6,7 @@
 
 **/npm-debug
 
+AngularJS1/src/js
+
 angular2/**/*.js
 angular2/**/*.map

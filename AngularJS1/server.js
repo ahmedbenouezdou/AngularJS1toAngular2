@@ -11,7 +11,6 @@ app.use(bodyParser.urlencoded({
 }));
 
 
-
 app.use(require('connect-livereload')());
 
 app.get('/listBook', service.getAllList);

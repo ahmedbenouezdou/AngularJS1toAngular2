@@ -1,39 +1,38 @@
 angular.module('panierModule', []);
-angular.module('panierModule').controller('panierCtrl', function ($scope,BooksListService,$rootScope,$cookieStore,OffreService,lisOffreServer) {
+angular.module('panierModule').controller('panierCtrl', function ($scope,BooksListService,$cookieStore,OffreService,lisOffreServer) {
 
 
     $scope.listOffre = {};
-    $scope.total=0;
-    if(angular.isDefined($cookieStore.get('listAddPanier'))){
-        if (!$cookieStore.get('listAddPanier').$isEmpty) {
-            $rootScope.panier = $cookieStore.get('listAddPanier');
-            if ($rootScope.panier.length > 0) {
-                $scope.total = OffreService.calculTotal($rootScope.panier);
-                listeOffres(lisOffreServer.getOffre(formeIsbn($rootScope.panier)));
-            }
 
+    function init(){
+        $scope.total=0;
+        $scope.panier=OffreService.nombreProduit();
+        if ($scope.panier.length > 0) {
+            $scope.total = OffreService.calculTotal($scope.panier);
+            listeOffres(lisOffreServer.getOffre(formeIsbn($scope.panier)));
         }
     }
+
 //methode de supprimer les articles
     $scope.remove=function(index){
-        $rootScope.panier.splice(index,1);
-        $cookieStore.put('listAddPanier', $rootScope.panier);
-        $scope.total=OffreService.calculTotal($rootScope.panier);
-        listeOffres(lisOffreServer.getOffre(formeIsbn($rootScope.panier)));
+        $scope.panier.splice(index,1);
+        $cookieStore.put('listAddPanier', $scope.panier);
+        $scope.total=OffreService.calculTotal($scope.panier);
+        listeOffres(lisOffreServer.getOffre(formeIsbn($scope.panier)));
 
-    }
+    };
 //methode de validation
     $scope.validCommande=function(){
 
-    }
+    };
 //fonction d'annuler commande
     $scope.annulerCommande=function(){
         console.log("annuler");
         $cookieStore.remove('listAddPanier');
-        $rootScope.panier=$cookieStore.get('listAddPanier');
+        $scope.panier=$cookieStore.get('listAddPanier');
         $scope.total=0;
-        listeOffres(lisOffreServer.getOffre(formeIsbn($rootScope.panier)));
-    }
+        listeOffres(lisOffreServer.getOffre(formeIsbn($scope.panier)));
+    };
 //transforamtion des isbn en chaine
     function formeIsbn(liste){
         var isbnOffre="";
@@ -69,9 +68,10 @@ angular.module('panierModule').controller('panierCtrl', function ($scope,BooksLi
         });
 
 
-    };
+    }
 
 
+    init();
 });
 
 

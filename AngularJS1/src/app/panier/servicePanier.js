@@ -1,3 +1,10 @@
+//constant pour affichage label réduction
+angular.module('panierModule').constant("labelOffre", {
+    percentage: {titre: 'Réduction', info: 'Vous avez une réduction de '},
+    minus: {titre: 'Déduction en caisse', info: 'Vous avez une réduction'},
+    slice: {titre: 'Remboursement', info: 'Vous avez une réduction de'}
+});
+
 angular.module('panierModule').factory('lisOffreServer', function ($http) {
     return {
         getOffre: function (idisbn) {
@@ -29,14 +36,9 @@ angular.module('panierModule').factory("calculRemise", function () {
     }
 });
 
-//constant pour affichage label réduction
-angular.module('panierModule').constant("labelOffre", {
-    percentage: {titre: 'Réduction', info: 'Vous avez une réduction de '},
-    minus: {titre: 'Déduction en caisse', info: 'Vous avez une réduction'},
-    slice: {titre: 'Remboursement', info: 'Vous avez une réduction de'}
-});
+
 //service gestion  offres
-angular.module('panierModule').service('OffreService', function (calculRemise, labelOffre) {
+angular.module('panierModule').service('OffreService', function (calculRemise, labelOffre,$cookieStore) {
 //methode calcule de la somme total
     this.calculTotal = function (produit) {
         var totalPanier = 0;
@@ -66,7 +68,6 @@ angular.module('panierModule').service('OffreService', function (calculRemise, l
                     /*traitement des donner reduction par percentage*/
                     if (!angular.isUndefined(results.percentage)) {
                         var soldePercentage = calculRemise.calculerPoucentage(total, results.percentage.value);
-                        console.log("percentage" + soldePercentage);
                         topPromo.push(soldePercentage);
                         setDataOffreKeyValues(soldePercentage, labelOffre.percentage.titre, labelOffre.percentage.info + results.percentage.value + '%', results.percentage);
 
@@ -76,7 +77,6 @@ angular.module('panierModule').service('OffreService', function (calculRemise, l
                     /*traitement de l'offre reduction encaisse*/
                     if (!angular.isUndefined(results.minus)) {
                         var soldeMinus = calculRemise.calculerRemiseCaise(total, results.minus.value);
-                        console.log("minus" + soldeMinus);
                         topPromo.push(soldeMinus);
                         setDataOffreKeyValues(soldeMinus, labelOffre.minus.titre, labelOffre.minus.info + soldeMinus + " en caisse", results.minus);
                     }
@@ -86,18 +86,26 @@ angular.module('panierModule').service('OffreService', function (calculRemise, l
                     /*traitement de l'offre reduction par rembourement sur l'argent*/
                     if (!angular.isUndefined(results.slice)) {
                         var soldeSlice = calculRemise.calculerRembourcement(total, results.slice.value, results.slice.sliceValue)
-                        console.log("slice" + soldeSlice);
                         topPromo.push(soldeSlice);
                         setDataOffreKeyValues(soldeSlice, labelOffre.slice.titre,
                             labelOffre.slice.info + results.slice.value + "€ sur chaque " + results.slice.sliceValue + "€", results.slice);
                     }
                     break;
             }
-            ;
         });
 
         topPromo.sort();
 
         return listOffre[topPromo[0]];
     };
+
+    this.nombreProduit =function nombreProduit(){
+        var panier=[];
+        if(angular.isDefined($cookieStore.get('listAddPanier'))){
+            if (!$cookieStore.get('listAddPanier').$isEmpty) {
+                panier = $cookieStore.get('listAddPanier');
+            }
+        }
+        return panier;
+    }
 });

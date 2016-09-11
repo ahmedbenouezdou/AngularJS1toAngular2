@@ -5,7 +5,7 @@ exports.getAllList = function getAllList(req, response) {
     var listBookServer= [
         {
             "isbn": "c8fabf68-8374-48fe-a7ea-a00ccd07afff",
-            "title": "Henri Potter à l'école des sorciers",
+            "title": "Henri Potter Ã  l'Ã©cole des sorciers",
             "price": 35,
             "cover": "http://localhost:8085//img/hp0.jpg"
         },
@@ -29,13 +29,13 @@ exports.getAllList = function getAllList(req, response) {
         },
         {
             "isbn": "78ee5f25-b84f-45f7-bf33-6c7b30f1b502",
-            "title": "Henri Potter et l'Ordre du phénix",
+            "title": "Henri Potter et l'Ordre du phÃ©nix",
             "price": 28,
             "cover": "http://localhost:8085/img/hp4.jpg"
         },
         {
             "isbn": "cef179f2-7cbc-41d6-94ca-ecd23d9f7fd6",
-            "title": "Henri Potter et le Prince de sang-mêlé",
+            "title": "Henri Potter et le Prince de sang-mÃ©lÃ©",
             "price": 30,
             "cover": "http://localhost:8085/img/hp5.jpg"
         },

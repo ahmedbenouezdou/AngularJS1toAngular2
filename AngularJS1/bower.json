@@ -6,13 +6,12 @@
     "license": "",
     "private": true,
     "dependencies": {
-        "angular": "*",
-        "angular-route": "*",
-        "angular-resource": "*",
-        "angular-animate":"*",
-        "angular-cookies":"*",
-        "angular-i18n": "*",
-        "angular-bootstrap": "*",
-        "bootstrap": "*"
+        "angular": "1.5.8",
+        "angular-route": "1.5.8",
+        "angular-resource": "1.5.8",
+        "angular-animate":"1.5.8",
+        "angular-cookies":"1.5.8",
+        "angular-i18n": "1.5.8",
+        "bootstrap": "3.3.7"
     }
 }

@@ -28,8 +28,7 @@ export class AppComponent {
     panierService:PanierService;
     nbPanier:number;
     constructor( panierService:PanierService) {
-        this.panierService=panierService;
-     //   this.nbPanier=this.panierElement();
+        this.panierService=PanierService;
     }
 
     panierElement(){

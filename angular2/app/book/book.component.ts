@@ -1,4 +1,5 @@
 import {Component, EventEmitter} from 'angular2/core';
+import {NgFor} from 'angular2/common';
 
 import {BookService} from './book.service';
 import {PanierService} from '../panier/panier.service';
@@ -13,7 +14,8 @@ import 'rxjs/add/observable/interval';
 
 @Component({
     selector: 'book',
-    templateUrl: 'app/book/book.html'
+    templateUrl: 'app/book/book.html',
+    directives: [NgFor]
 })
 
 export class BookComponent {

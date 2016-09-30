@@ -15,42 +15,35 @@ app.config(function ($routeProvider) {
         });
 });
 
-angular.module('bookModule', []);
+angular.module('bookModule', ['panierModule']);
 
-angular.module('bookModule').controller('bookCrt', function ($scope,BooksListService,$cookieStore,$rootScope) {
+angular.module('bookModule').controller('bookCrt', function ($scope,BooksListService,$cookieStore,OffreService) {
 
 
     function init() {
+        BooksListService.initListBookServer();
         $scope.listBook = BooksListService.getList();
-        $rootScope.panier = [];
+        $scope.panier = [];
         $scope.quantite = [];
-        for (var i = 0; i < $scope.listBook.length; i++) {
-            $scope.quantite[i] = 0;
-        }
-        var listAddpanier = $cookieStore.get('listAddPanier');
+        $scope.listBook.forEach(function(elementBook,indexBook){
+            $scope.quantite[indexBook] = 0;
+        });
+
+        var listAddpanier = OffreService.nombreProduit();
 
         if (angular.isDefined(listAddpanier)) {
             if (!(listAddpanier.$isEmpty)) {
-                $rootScope.panier = $cookieStore.get('listAddPanier');
-                console.log($scope.listBook);
-                for (var i = 0; i < $scope.listBook.length; i++) {
-
-                    for (var j = 0; j < $rootScope.panier.length; j++) {
-                        if (angular.equals($rootScope.panier[j].book, $scope.listBook[i])) {
-
-                            $scope.quantite[i] = $rootScope.panier[j].quantiteBook;
+                $scope.panier=OffreService.nombreProduit();
+                $scope.listBook.forEach(function(elementBook,indexBook){
+                    $scope.panier.forEach(function(elementPanier){
+                        if (angular.equals(elementPanier.book, elementBook)) {
+                            $scope.quantite[indexBook] = elementPanier.quantiteBook;
                         }
-                    }
-                }
+                    })
+                });
             }
         }
-    };
-
-
-
-
-
-
+    }
 
     $scope.addPanier=function(index){
         //index par rapport a la liste des produits et pas par rapport a $rootscope
@@ -59,24 +52,24 @@ angular.module('bookModule').controller('bookCrt', function ($scope,BooksListSer
         }else{
             var existe=true;
             var position=0;
-            for(var j=0;j<$rootScope.panier.length;j++){
-                if(angular.equals($rootScope.panier[j].book.isbn,BooksListService.getArticle(index).isbn)){
+            for(var j=0;j<$scope.panier.length;j++){
+                if(angular.equals($scope.panier[j].book.isbn,BooksListService.getArticle(index).isbn)){
                     existe=false;
                     position=j;
                 }
             }
             //si l'article n'existe pas on ajoute dans le panier
             if(existe){
-                $rootScope.panier.push({
+                $scope.panier.push({
                     'book':BooksListService.getArticle(index),
                     'quantiteBook':$scope.quantite[index]
                 });
-                $cookieStore.put('listAddPanier',$rootScope.panier);
+                $cookieStore.put('listAddPanier',$scope.panier);
             }else{
                 //sinon si l'article existe modifier quantite
-                if(!angular.equals($rootScope.panier[position].quantiteBook,$scope.quantite[index])){
-                    $rootScope.panier[position].quantiteBook=$scope.quantite[index];
-                    $cookieStore.put('listAddPanier',$rootScope.panier);
+                if(!angular.equals($scope.panier[position].quantiteBook,$scope.quantite[index])){
+                    $scope.panier[position].quantiteBook=$scope.quantite[index];
+                    $cookieStore.put('listAddPanier',$scope.panier);
 
                 }
             }
@@ -90,8 +83,7 @@ angular.module('bookModule').service('BooksListService', function ($http) {
 
     var listBookServer= [];
 
-    this.getList = function () {
-
+    this.getList = function getList() {
         $http.get('listBook/').
             success(function (data, status, headers, config) {
                 for (var i = 0; i < data.length; i++)
@@ -104,66 +96,82 @@ angular.module('bookModule').service('BooksListService', function ($http) {
 
     };
 
-    this.getArticle = function (index) {
+    this.getArticle = function getArticle (index) {
         return  listBookServer[index];
     };
 
+    this.initListBookServer= function initListBookServer(){
+        listBookServer= [];
+    }
+
 });
+angular.module('angularJS1toAngular2BeeZen').controller('navCrt', function ($scope, OffreService) {
+
+    $scope.$watch(function () {
+            return OffreService.nombreProduit();
+        },
+        function(newVal) {
+            $scope.panier = newVal;
+
+        }, true);
+
+
+});
+
 angular.module('panierModule', []);
-angular.module('panierModule').controller('panierCtrl', function ($scope,BooksListService,$rootScope,$cookieStore,OffreService,lisOffreServer) {
+angular.module('panierModule').controller('panierCtrl', function ($scope, BooksListService, $cookieStore, OffreService, lisOffreServer) {
 
 
     $scope.listOffre = {};
-    $scope.total=0;
-    if(angular.isDefined($cookieStore.get('listAddPanier'))){
-        if (!$cookieStore.get('listAddPanier').$isEmpty) {
-            $rootScope.panier = $cookieStore.get('listAddPanier');
-            if ($rootScope.panier.length > 0) {
-                $scope.total = OffreService.calculTotal($rootScope.panier);
-                listeOffres(lisOffreServer.getOffre(formeIsbn($rootScope.panier)));
-            }
 
+    function init() {
+        $scope.total = 0;
+        $scope.panier = OffreService.nombreProduit();
+        if ($scope.panier.length > 0) {
+            $scope.total = OffreService.calculTotal($scope.panier);
+            listeOffres(lisOffreServer.getOffre(formeIsbn($scope.panier)));
         }
     }
+
 //methode de supprimer les articles
-    $scope.remove=function(index){
-        $rootScope.panier.splice(index,1);
-        $cookieStore.put('listAddPanier', $rootScope.panier);
-        $scope.total=OffreService.calculTotal($rootScope.panier);
-        listeOffres(lisOffreServer.getOffre(formeIsbn($rootScope.panier)));
+    $scope.remove = function (index) {
+        $scope.panier.splice(index, 1);
+        $cookieStore.put('listAddPanier', $scope.panier);
+        $scope.total = OffreService.calculTotal($scope.panier);
+        listeOffres(lisOffreServer.getOffre(formeIsbn($scope.panier)));
 
-    }
+    };
 //methode de validation
-    $scope.validCommande=function(){
+    $scope.validCommande = function () {
 
-    }
+    };
 //fonction d'annuler commande
-    $scope.annulerCommande=function(){
-        console.log("annuler");
+    $scope.annulerCommande = function () {
         $cookieStore.remove('listAddPanier');
-        $rootScope.panier=$cookieStore.get('listAddPanier');
-        $scope.total=0;
-        listeOffres(lisOffreServer.getOffre(formeIsbn($rootScope.panier)));
-    }
+        $scope.panier = $cookieStore.get('listAddPanier');
+        $scope.total = 0;
+        listeOffres(lisOffreServer.getOffre(formeIsbn($scope.panier)));
+    };
 //transforamtion des isbn en chaine
-    function formeIsbn(liste){
-        var isbnOffre="";
-        for(var i=0; i<liste.length;i++){
-            if(i==0) isbnOffre= liste[i].book.isbn;
-            else{
-                if(i==liste.length-1) isbnOffre= isbnOffre+","+liste[i].book.isbn;
-                else isbnOffre=isbnOffre+","+ liste[i].book.isbn;
+    function formeIsbn(liste) {
+        var isbnOffre = "";
+        for (var i = 0; i < liste.length; i++) {
+            if (i == 0) isbnOffre = liste[i].book.isbn;
+            else {
+                if (i == liste.length - 1) isbnOffre = isbnOffre + "," + liste[i].book.isbn;
+                else isbnOffre = isbnOffre + "," + liste[i].book.isbn;
             }
 
         }
 
         return isbnOffre;
     }
-//methode de gestion des offres
-    function listeOffres (resultatGet) {
-        resultatGet.success(function(data){
 
-            var setDataKeyValues= function (key, value, sliceValue) {
+//methode de gestion des offres
+    function listeOffres(resultatGet) {
+        resultatGet.success(function (data) {
+
+            var setDataKeyValues = function (key, value, sliceValue) {
                 $scope.listOffre[key] = {
                     sliceValue: sliceValue,
                     value: value
@@ -172,20 +180,27 @@ angular.module('panierModule').controller('panierCtrl', function ($scope,BooksLi
             for (var i = 0; i < data.offers.length; i++) {
                 setDataKeyValues(data.offers[i].type, data.offers[i].value, data.offers[i].sliceValue);
             }
-            $scope.listOffre = OffreService.topOffre($scope.listOffre,$scope.total);
-            console.log("Offre");
-            console.log($scope.listOffre);
+            $scope.listOffre = OffreService.topOffre($scope.listOffre, $scope.total);
+
         }).error(function () {
-            console.log("error");
+            $scope.listOffre = {};
         });
 
 
-    };
+    }
 
 
+    init();
 });
 
 
+
+//constant pour affichage label réduction
+angular.module('panierModule').constant("labelOffre", {
+    percentage: {titre: 'Réduction', info: 'Vous avez une réduction de '},
+    minus: {titre: 'Déduction en caisse', info: 'Vous avez une réduction'},
+    slice: {titre: 'Remboursement', info: 'Vous avez une réduction de'}
+});
 
 angular.module('panierModule').factory('lisOffreServer', function ($http) {
     return {
@@ -218,14 +233,9 @@ angular.module('panierModule').factory("calculRemise", function () {
     }
 });
 
-//constant pour affichage label réduction
-angular.module('panierModule').constant("labelOffre", {
-    percentage: {titre: 'Réduction', info: 'Vous avez une réduction de '},
-    minus: {titre: 'Déduction en caisse', info: 'Vous avez une réduction'},
-    slice: {titre: 'Remboursement', info: 'Vous avez une réduction de'}
-});
+
 //service gestion  offres
-angular.module('panierModule').service('OffreService', function (calculRemise, labelOffre) {
+angular.module('panierModule').service('OffreService', function (calculRemise, labelOffre,$cookieStore) {
 //methode calcule de la somme total
     this.calculTotal = function (produit) {
         var totalPanier = 0;
@@ -255,7 +265,6 @@ angular.module('panierModule').service('OffreService', function (calculRemise, l
                     /*traitement des donner reduction par percentage*/
                     if (!angular.isUndefined(results.percentage)) {
                         var soldePercentage = calculRemise.calculerPoucentage(total, results.percentage.value);
-                        console.log("percentage" + soldePercentage);
                         topPromo.push(soldePercentage);
                         setDataOffreKeyValues(soldePercentage, labelOffre.percentage.titre, labelOffre.percentage.info + results.percentage.value + '%', results.percentage);
 
@@ -265,7 +274,6 @@ angular.module('panierModule').service('OffreService', function (calculRemise, l
                     /*traitement de l'offre reduction encaisse*/
                     if (!angular.isUndefined(results.minus)) {
                         var soldeMinus = calculRemise.calculerRemiseCaise(total, results.minus.value);
-                        console.log("minus" + soldeMinus);
                         topPromo.push(soldeMinus);
                         setDataOffreKeyValues(soldeMinus, labelOffre.minus.titre, labelOffre.minus.info + soldeMinus + " en caisse", results.minus);
                     }
@@ -275,18 +283,26 @@ angular.module('panierModule').service('OffreService', function (calculRemise, l
                     /*traitement de l'offre reduction par rembourement sur l'argent*/
                     if (!angular.isUndefined(results.slice)) {
                         var soldeSlice = calculRemise.calculerRembourcement(total, results.slice.value, results.slice.sliceValue)
-                        console.log("slice" + soldeSlice);
                         topPromo.push(soldeSlice);
                         setDataOffreKeyValues(soldeSlice, labelOffre.slice.titre,
                             labelOffre.slice.info + results.slice.value + "€ sur chaque " + results.slice.sliceValue + "€", results.slice);
                     }
                     break;
             }
-            ;
         });
 
         topPromo.sort();
 
         return listOffre[topPromo[0]];
     };
+
+    this.nombreProduit =function nombreProduit(){
+        var panier=[];
+        if(angular.isDefined($cookieStore.get('listAddPanier'))){
+            if (!$cookieStore.get('listAddPanier').$isEmpty) {
+                panier = $cookieStore.get('listAddPanier');
+            }
+        }
+        return panier;
+    }
 });

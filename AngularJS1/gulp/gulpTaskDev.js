@@ -44,7 +44,7 @@ gulp.task('lint', function () {
 
 // - Génération des styles css
 gulp.task('styles', function () {
-    return gulp.src(['src/scss/*.scss', './libs/bootstrap/dist/css/*.min.css', './libs/bootstrap-daterangepicker/daterangepicker.css'])
+    return gulp.src(['src/scss/*.scss', './libs/bootstrap/dist/css/*.min.css'])
         .pipe(plumber())
         .pipe(sass())
         .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))

@@ -2,6 +2,8 @@ import {Component, Input, Output, EventEmitter} from 'angular2/core';
 
 import {PanierService} from './panier.service';
 
+import {FORM_DIRECTIVES} from 'angular2/common';
+
 @Component({
     selector: 'counter',
     styles: [`
@@ -27,6 +29,7 @@ import {PanierService} from './panier.service';
     }
   `],
     templateUrl: 'app/panier/counter.html',
+    directives:[FORM_DIRECTIVES],
     outputs: ['counterChange']
 })
 export class CounterComponent {
